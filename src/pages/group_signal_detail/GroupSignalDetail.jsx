@@ -62,7 +62,7 @@ const GroupSignalDetail = () => {
 if(redDuration === 13){
   triggerAllUploads()
 }
-    console.log(redDuration)
+    // console.log(redDuration)
     //  the logic for when the cycle completes
   };
 
@@ -92,7 +92,7 @@ if(redDuration === 13){
           </div>
         ))}
       </div>
-                  <TrafficSimulation data={data} cycleCompleted={handleCycleCompleted} />
+                  <TrafficSimulation data={data} cycleCompleted={handleCycleCompleted} signalGroupId='6773b57ae9eed75638f07f86'/>
 
     </div>
   );
