@@ -15,8 +15,10 @@ const GroupSignalDetail = () => {
   const uploadFunctions = [];
 
   useEffect(() => {
-    dispatch(getGroupSignalDataThunk('6773b57ae9eed75638f07f86'));
-  }, [dispatch]);
+    console.log("called")
+    callTheModel()
+    
+  }, []);
 
   useEffect(() => {
     if (data && data.signals) {
@@ -35,9 +37,77 @@ const GroupSignalDetail = () => {
       return updatedSignalList;
     });
   };
-
+  // const callTheModel = async () => {
+  //   try {
+  //     // First API Call - /initialize
+  //     const response1 = await axios.get('http://localhost:8000/initialize?id=6773b57ae9eed75638f07f86');
+  //     console.log(`response after initialize:`, response1.data);
+  
+  //     // Check if initialization was successful
+  //     if (response1.data.message === "Initialization successful") {
+  //       // Wait for 2 seconds before dispatching another action
+  //       setTimeout(async () => {
+  //         // Dispatching the next action (optional, depends on your need)
+  //         dispatch(getGroupSignalDataThunk('6773b57ae9eed75638f07f86'));
+  
+  //         // Second API Call - /control
+          
+  //       }, 2000); // Delay of 2 seconds before next action
+  //       try {
+  //         const response2 = await axios.get('http://localhost:8000/control?id=6773b57ae9eed75638f07f86');
+  //         console.log(`response after control:`, response2.data);
+  //       } catch (error) {
+  //         console.error("Error during /control API call:", error);
+  //       }
+       
+  //     } else {
+  //       console.error("Initialization failed:", response1.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during /initialize API call:", error);
+  //   }
+  // };
+  const callTheModel = async () => {
+    try {
+      // First API Call - /initialize
+      const response1 =  axios.get('http://localhost:8000/initialize?id=6773b57ae9eed75638f07f86');
+      console.log(`response after initialize:`, response1.data);
+  
+      // Check if initialization was successful
+      // if (response1.data.message === "Initialization successful") {
+        // try {
+        //   // Call /control API
+        //   const response2 =  axios.get('http://localhost:8000/control?id=6773b57ae9eed75638f07f86');
+        //   console.log(`response after control:`, response2.data);
+        // } catch (error) {
+        //   console.error("Error during /control API call:", error);
+        // }
+  
+        // Dispatching the next action after 2 seconds
+        setTimeout(() => {
+          dispatch(getGroupSignalDataThunk('6773b57ae9eed75638f07f86'));
+        }, 2000); // Delay of 2 seconds before dispatching
+  
+      // } else {
+      //   console.error("Initialization failed:", response1.data.message);
+      //   // Ensure dispatch happens even if initialization fails
+      //   setTimeout(() => {
+      //     dispatch(getGroupSignalDataThunk('6773b57ae9eed75638f07f86'));
+      //   }, 2000); // Delay of 2 seconds before dispatching
+      // }
+  
+    } catch (error) {
+      console.error("Error during /initialize API call:", error);
+      // Ensure dispatch happens even if /initialize fails
+      // setTimeout(() => {
+      //   dispatch(getGroupSignalDataThunk('6773b57ae9eed75638f07f86'));
+      // }, 2000); // Delay of 2 seconds before dispatching
+    }
+  };
+  
+  
+  
   const sendPatchRequest = () => {
-    if (updatedSignals.length === 3) {
       const payload = { image_list: updatedSignals };
 
       axios
@@ -50,7 +120,7 @@ const GroupSignalDetail = () => {
         });
 
       setUpdatedSignals([]);
-    }
+    
   };
 
   useEffect(() => {
@@ -60,8 +130,14 @@ const GroupSignalDetail = () => {
   }, [updatedSignals]);
   const handleCycleCompleted = (redDuration) => {
 if(redDuration === 13){
+
   triggerAllUploads()
+
 }
+if(redDuration === 5){
+  callTheModel()
+}
+
     // console.log(redDuration)
     //  the logic for when the cycle completes
   };
